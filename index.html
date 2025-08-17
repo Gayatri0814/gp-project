@@ -1,39 +1,87 @@
 <!DOCTYPE html>
-<!-- Coding by CodingLab | www.codinglabweb.com-->
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dynamic Todo List Application</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home - My To-Do App</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>📝 My To-Do List</h1>
+    <nav class="navbar">
+      <div class="logo"></div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>   
+        <li><a href="tasks.html">Tasks</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css" />
-
-    <!-- Unicons CSS -->
-    <link
-      rel="stylesheet"
-      href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <div class="input-field">
-        <textarea placeholder="Enter your new todo"></textarea>
-        <i class="uil uil-notes note-icon"></i>
-      </div>
-
-      <ul class="todoLists"></ul>
-
-      <div class="pending-tasks">
-        <span
-          >You have <span class="pending-num"> no </span> tasks pending.</span
-        >
-        <button class="clear-button">Clear All</button>
-      </div>
+  <!-- ToDo Input -->
+  <div class="container">
+    <div class="input-field">
+      <input type="text" id="taskInput" placeholder="Enter your new to do" />
+      <button id="addTaskBtn">Add Task</button>
     </div>
 
-    <!-- JavaScript -->
-    <script src="js/script.js"></script>
-  </body>
+    <ul class="todoLists" id="taskList"></ul>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 My To-Do App | Built by Gayatri & Pratik</p>
+  </footer>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const taskList = document.getElementById("taskList");
+
+    // Load tasks from localStorage
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    function renderTasks() {
+      taskList.innerHTML = "";
+      tasks.forEach((task, index) => {
+        let li = document.createElement("li");
+        li.innerHTML = `
+          <span style="${task.completed ? 'text-decoration: line-through; color: gray;' : ''}">
+            ${task.text}
+          </span>
+          <div>
+            <button onclick="toggleTask(${index})">${task.completed ? "Undo" : "Done"}</button>
+            <button onclick="deleteTask(${index})">❌</button>
+          </div>
+        `;
+        taskList.appendChild(li);
+      });
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function addTask() {
+      if (taskInput.value.trim() === "") return;
+      tasks.push({ text: taskInput.value, completed: false });
+      taskInput.value = "";
+      renderTasks();
+    }
+
+    function toggleTask(index) {
+      tasks[index].completed = !tasks[index].completed;
+      renderTasks();
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      renderTasks();
+    }
+
+    addTaskBtn.addEventListener("click", addTask);
+    window.onload = renderTasks;
+  </script>
+</body>
 </html>

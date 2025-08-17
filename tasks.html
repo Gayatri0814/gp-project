@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasks - My To-Do App</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>📝 My To-Do List</h1>
+    <nav class="navbar">
+      <div class="logo">MyTasks</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>   
+        <li><a href="tasks.html">Tasks</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Tasks Container -->
+  <div class="container">
+    <h2>📋 Your Tasks</h2>
+
+    <div class="task-section">
+      <h3>⏳ Pending Tasks</h3>
+      <ul id="pendingTasks"></ul>
+    </div>
+
+    <div class="task-section">
+      <h3>✅ Completed Tasks</h3>
+      <ul id="completedTasks"></ul>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 My To-Do App | Built by Gayatri & Pratik</p>
+  </footer>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    const pendingList = document.getElementById("pendingTasks");
+    const completedList = document.getElementById("completedTasks");
+
+    function renderTasks() {
+      pendingList.innerHTML = "";
+      completedList.innerHTML = "";
+
+      tasks.forEach(task => {
+        let li = document.createElement("li");
+        li.textContent = task.text;
+
+        if (task.completed) {
+          li.style.textDecoration = "line-through";
+          li.style.color = "gray";
+          completedList.appendChild(li);
+        } else {
+          pendingList.appendChild(li);
+        }
+      });
+    }
+
+    window.onload = renderTasks;
+  </script>
+</body>
+</html>
